@@ -1,6 +1,5 @@
 import prisma from "../db";
 
-// Get all
 export const getProducts = async (req, res) => {
 	const user = await prisma.user.findUnique({
 		where: {
@@ -26,17 +25,53 @@ export const getOneProduct = async (req, res) => {
 	res.json({ data: product });
 };
 
-export const createProduct = async (req, res) => {
-	const product = await prisma.product.create({
-		data: {
+export const addProduct = async (req, res) => {
+
+	const existingProduct = await prisma.product.findFirst({
+		where: {
 			name: req.body.name,
-			belongsToId: req.user.id,
+			belongsToId: req.user.id
 		}
 	})
-	res.json({ data: product })
+
+	if (existingProduct) {
+		const updatedProduct = await prisma.product.update({
+			where: {
+				id: existingProduct.id
+			},
+			data: {
+				quantity: {
+					increment: 1
+				}
+			},
+		})
+		res.json({ data: updatedProduct })
+	} else {
+		const product = await prisma.product.create({
+			data: {
+				name: req.body.name,
+				description: req.body.description,
+				belongsToId: req.user.id,
+			}
+		})
+		res.json({ data: product })
+	}
+
 }
 
-export const updateProduct =async (req, res) => {
+export const createProducts = async (req, res) => {
+	const productsWithId = req.body.products.map((product) => ({
+			...product,
+			belongsToId: req.user.id
+		})
+	)
+	const products = await prisma.product.createMany({
+		data: productsWithId
+	})
+	res.json({ data: products })
+}
+
+export const updateProduct = async (req, res) => {
 	const updated = await prisma.product.update({
 		where: {
 			id_belongsToId: {
@@ -45,7 +80,9 @@ export const updateProduct =async (req, res) => {
 			}
 		},
 		data: {
-			name: req.body.name
+			name: req.body.name,
+			description: req.body.description,
+			quantity: req.body.quantity
 		}
 	})
 
