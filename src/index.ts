@@ -3,6 +3,6 @@ dotenv.config();
 
 import app from "./server";
 
-app.listen(4001, () => {
-	console.log(`Listening on http://localhost:4001`);
+app.listen(3001, () => {
+	console.log(`Listening on http://localhost:3001`);
 });
