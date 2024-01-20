@@ -19,13 +19,15 @@ model User {
 }
 
 model Product {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-
+  id          String   @id @default(uuid())
   name        String   @db.VarChar(255)
+  description String?   @db.Text
+  quantity    Int      @db.SmallInt @default(1)
+  createdAt   DateTime @default(now())
   belongsToId String
   belongsTo   User     @relation(fields: [belongsToId], references: [id])
   updates     Update[]
+
   @@unique([id, belongsToId])
 }
 
@@ -46,8 +48,8 @@ model Update {
   version String?
   asset   String?
 
-  productId   String
-  product     Product       @relation(fields: [productId], references: [id])
+  productId    String
+  product      Product       @relation(fields: [productId], references: [id])
   updatePoints UpdatePoint[]
 }
 
