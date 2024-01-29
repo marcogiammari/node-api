@@ -2,6 +2,7 @@ import { Router } from "express";
 import { body, validationResult } from "express-validator";
 import { handleInputErrors } from "./modules/middleware";
 import { addProduct, createProducts, deleteProduct, getOneProduct, getProducts, updateProduct } from "./handlers/product";
+import { getOneUpdate, getUpdates } from "./handlers/update";
 
 const router = Router();
 
@@ -42,9 +43,9 @@ router.delete("/product/:id", deleteProduct);
  * Update
  */
 
-router.get("/updates", () => {});
+router.get("/updates", getUpdates);
 
-router.get("/update/:id", () => {});
+router.get("/update/:id", getOneUpdate);
 
 router.put(
 	"/update/:id",
