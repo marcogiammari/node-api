@@ -59,4 +59,30 @@ export const getOneUpdate = async (req, res) => {
     res.json({data: update})
 }
 
+export const updateUpdate = async (req, res) => {
 
+    const updatedUpdate = await prisma.update.update({
+        where: {
+            id: req.params.id
+        },
+        data: {
+            updatedAt: new Date(),
+            title: req.body.title,
+            body: req.body.body,
+            status: req.body.status,
+            version: req.body.version
+        }
+    })
+
+    res.json({ data: updatedUpdate })
+}
+
+export const deleteUpdate = async (req, res) => {
+    const deletedUpdate = await prisma.update.delete({
+        where: {
+            id: req.params.id
+        }
+    })
+    
+    res.json({ data: deletedUpdate })
+}

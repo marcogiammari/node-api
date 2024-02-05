@@ -2,7 +2,7 @@ import { Router } from "express";
 import { body, validationResult } from "express-validator";
 import { handleInputErrors } from "./modules/middleware";
 import { addProduct, addProducts, deleteProduct, getOneProduct, getProducts, updateProduct } from "./handlers/product";
-import { createUpdate, getOneUpdate, getUpdates } from "./handlers/update";
+import { createUpdate, deleteUpdate, getOneUpdate, getUpdates, updateUpdate } from "./handlers/update";
 
 const router = Router();
 
@@ -51,10 +51,9 @@ router.put(
 	"/update/:id",
 	body("title").optional(),
 	body("body").optional(),
-	body("status").isIn(["IN_PROGRESS", "SHIPPED", "DEPRECATED"]),
 	body("version").optional(),
 	handleInputErrors,
-	// updateUpdate
+	updateUpdate
 );
 
 router.post(
@@ -64,7 +63,7 @@ router.post(
 	createUpdate
 );
 
-router.delete("/update/:id", () => {});
+router.delete("/update/:id", deleteUpdate);
 
 /**
  * Update Point
