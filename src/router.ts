@@ -1,8 +1,8 @@
 import { Router } from "express";
 import { body, validationResult } from "express-validator";
 import { handleInputErrors } from "./modules/middleware";
-import { addProduct, createProducts, deleteProduct, getOneProduct, getProducts, updateProduct } from "./handlers/product";
-import { getOneUpdate, getUpdates } from "./handlers/update";
+import { addProduct, addProducts, deleteProduct, getOneProduct, getProducts, updateProduct } from "./handlers/product";
+import { createUpdate, getOneUpdate, getUpdates } from "./handlers/update";
 
 const router = Router();
 
@@ -34,7 +34,7 @@ router.post(
 	body('products').isArray(),
 	body('products.*.name').isString(),
 	handleInputErrors,
-	createProducts
+	addProducts
 )
 
 router.delete("/product/:id", deleteProduct);
@@ -53,20 +53,15 @@ router.put(
 	body("body").optional(),
 	body("status").isIn(["IN_PROGRESS", "SHIPPED", "DEPRECATED"]),
 	body("version").optional(),
-	(req, res) => {
-		const errors = validationResult(req);
-		if (!errors.isEmpty()) {
-			res.status(400);
-			res.json({ errors: errors.array() });
-		}
-	}
+	handleInputErrors,
+	// updateUpdate
 );
 
 router.post(
 	"/update",
 	body("title").exists().isString(),
 	body("body").exists().isString(),
-	() => {}
+	createUpdate
 );
 
 router.delete("/update/:id", () => {});

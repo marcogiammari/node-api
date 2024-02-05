@@ -59,7 +59,7 @@ export const addProduct = async (req, res) => {
 
 }
 
-export const createProducts = async (req, res) => {
+export const addProducts = async (req, res) => {
 	const productsWithId = req.body.products.map((product) => ({
 			...product,
 			belongsToId: req.user.id
