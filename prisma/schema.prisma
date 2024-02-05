@@ -25,10 +25,8 @@ model Product {
   quantity    Int      @db.SmallInt @default(1)
   createdAt   DateTime @default(now())
   belongsToId String
-  belongsTo   User     @relation(fields: [belongsToId], references: [id])
+  belongsTo   User     @relation(fields: [belongsToId], references: [id], onDelete: Cascade)
   updates     Update[]
-
-  @@unique([id, belongsToId])
 }
 
 enum UPDATE_STATUS {
@@ -49,7 +47,7 @@ model Update {
   asset   String?
 
   productId    String
-  product      Product       @relation(fields: [productId], references: [id])
+  product      Product       @relation(fields: [productId], references: [id], onDelete: Cascade)
   updatePoints UpdatePoint[]
 }
 
@@ -62,5 +60,5 @@ model UpdatePoint {
   description String
 
   updateId String
-  update   Update @relation(fields: [updateId], references: [id])
+  update   Update @relation(fields: [updateId], references: [id], onDelete: Cascade)
 }
